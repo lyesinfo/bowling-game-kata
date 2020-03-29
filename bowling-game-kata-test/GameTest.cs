@@ -13,7 +13,7 @@ namespace bowling_game_kata_test
         }
 
         [Test]
-        public void StartGmae_RoundOne_ReturnScore()
+        public void Play_RoundOne_ReturnScore()
         {
             //Arrange
             int expected = 7;
@@ -25,7 +25,7 @@ namespace bowling_game_kata_test
             Assert.AreEqual(expected, actual);
         }
         [Test]
-        public void StartGmae_RoundTwo_ReturnScore()
+        public void Play_RoundTwo_ReturnScore()
         {
             //Arrange
             int expected = 14;
@@ -39,10 +39,10 @@ namespace bowling_game_kata_test
             Assert.AreEqual(expected, actual);
         }
         [Test]
-        public void StartGmae_RoundFour_ReturnFrameNumber()
+        public void Play_RoundFour_ReturnFrameNumber()
         {
             //Arrange
-            int expected = 4;
+            int expected = 5;
             //Act
             game.Played(1);
             game.Played(4);
@@ -61,9 +61,9 @@ namespace bowling_game_kata_test
         {
             //Arrange
             int expectedFrame1 = 5;
-            int expectedFrame2 = 14;
-            int expectedFrame3 = 19;
-            int expectedFrame4 = 28;
+            int expectedFrame2 = 9;
+            int expectedFrame3 = 5;
+            int expectedFrame4 = 9;
             //Act
             game.Played(1);
             game.Played(4);
@@ -82,6 +82,24 @@ namespace bowling_game_kata_test
             Assert.AreEqual(expectedFrame2, actualFrame2);
             Assert.AreEqual(expectedFrame3, actualFrame3);
             Assert.AreEqual(expectedFrame4, actualFrame4);
+        }
+        [Test]
+        public void Play_RoundFourWithSpare_ReturnScore()
+        {
+            //Arrange
+            int expected = 38;
+            //Act
+            game.Played(1);
+            game.Played(4);
+            game.Played(4);
+            game.Played(5);
+            game.Played(6);
+            game.Played(4);
+            game.Played(5);
+            game.Played(4);
+            int actual = game.Score;
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }

@@ -7,23 +7,41 @@ namespace bowling_game_kata
     public class Game
     {
         public int Score { get; private set; }
-        public int CurrentFrame { get; private set; }
+        public int CurrentFrame { get; private set; } = 1;
 
-        private bool firstThrow = false;
-        private int[] frames = new int[11];
-        public void Played(int v)
+        private bool IsFirstThrow = true;
+        private int[] throws = new int[21];
+        public void Played(int kickedBalls)
         {
-            Score += v;
-            if (!firstThrow) firstThrow = true;
-            else {
+            Score += kickedBalls;
+
+            if (IsFirstThrow)
+            {
+                throws[CurrentFrame * 2] = kickedBalls;
+                IsFirstThrow = false;
+                if (IsSpare())
+                {
+                    throws[(CurrentFrame - 1) * 2 + 1] += kickedBalls;
+                    Score += kickedBalls;
+                }
+            }
+            else
+            {
+                throws[CurrentFrame * 2 + 1] = kickedBalls;
+
+                IsFirstThrow = true;
                 CurrentFrame++;
-                frames[CurrentFrame] = Score;
-                firstThrow = false; }
+            }
+        }
+
+        private bool IsSpare()
+        {
+            return throws[(CurrentFrame - 1) * 2] + throws[(CurrentFrame - 1) * 2 + 1] == 10;
         }
 
         public int GetScoreByFrame(int frameNumber)
         {
-            return frames[frameNumber];
+            return throws[frameNumber * 2] + throws[frameNumber * 2 +1];
         }
     }
 }
