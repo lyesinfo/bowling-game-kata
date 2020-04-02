@@ -101,5 +101,74 @@ namespace bowling_game_kata_test
             //Assert
             Assert.AreEqual(expected, actual);
         }
+        [Test]
+        public void Play_GetAStrike_ReturnScore()
+        {
+            //Arrange
+            int expected = 33;
+            //Act
+            game.Played(1);
+            game.Played(4);
+
+            game.Played(10);
+
+            game.Played(5);
+            game.Played(4);
+           
+            int actual = game.Score;
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [Test]
+        public void Play_NineStrikes_PerfectScoreMinusOne()
+        {
+            //Arrange
+            int expected = 299;
+            //Act
+            for (int i = 0; i < 11; i++)
+            {
+                game.Played(10);
+            }
+            game.Played(9);
+
+            int actual = game.Score;
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [Test]
+        public void Play_PerfectGame_PerfectScore()
+        {
+            //Arrange
+            int expected = 300;
+            //Act
+            for (int i = 0; i < 12; i++)
+            {
+                game.Played(10);
+            }
+
+            int actual = game.Score;
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+        [Test]
+        public void Play_TwoStrikes_GetScore()
+        {
+            //Arrange
+            int expected = 58;
+            //Act
+            game.Played(1);
+            game.Played(4);
+
+            game.Played(10);
+
+            game.Played(10);
+
+            game.Played(5);
+            game.Played(4);
+
+            int actual = game.Score;
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
