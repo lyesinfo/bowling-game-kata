@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace bowling_game_kata
 {
     public class Game
@@ -13,28 +10,26 @@ namespace bowling_game_kata
         private int[] throws = new int[23];
         public void Played(int kickedBalls)
         {
-            Score += kickedBalls;
+            IncrementScore(kickedBalls);
             if (IsFirstThrow)
             {
-                throws[CurrentFrame * 2] += kickedBalls;
+                SetThrows(CurrentFrame * 2, kickedBalls);
 
-
-                if (throws[(CurrentFrame - 1) * 2] == 10 && CurrentFrame < 11)
+                if (IsStrike(CurrentFrame - 1) && CurrentFrame < 11)
                 {
-                    throws[(CurrentFrame - 1) * 2 + 1] += kickedBalls;
-                    Score += kickedBalls;
+                    IncrementScore(kickedBalls);
+                    SetThrows((CurrentFrame - 1) * 2 + 1, kickedBalls);
 
-                    if (throws[(CurrentFrame - 2) * 2] == 10)
+                    if (IsStrike(CurrentFrame - 2))
                     {
-                        throws[(CurrentFrame - 2) * 2 + 1] += kickedBalls;
-                        Score += kickedBalls;
+                        IncrementScore(kickedBalls);
+                        SetThrows((CurrentFrame - 2) * 2 + 1, kickedBalls);
                     }
                 }
-                else
-                    if (IsSpare())
+                if (IsSpare())
                 {
-                    throws[(CurrentFrame - 1) * 2 + 1] += kickedBalls;
-                    Score += kickedBalls;
+                    IncrementScore(kickedBalls);
+                    SetThrows((CurrentFrame - 1) * 2 + 1, kickedBalls);
                 }
                 if (kickedBalls == 10)
                 {
@@ -44,16 +39,31 @@ namespace bowling_game_kata
             }
             else
             {
-                throws[CurrentFrame * 2 + 1] += kickedBalls;
-                if (throws[(CurrentFrame - 1) * 2] == 10 && CurrentFrame < 11)
+                SetThrows(CurrentFrame * 2 + 1, kickedBalls);
+                if (IsStrike(CurrentFrame - 1))
                 {
-                    throws[(CurrentFrame - 1) * 2 + 1] += kickedBalls;
-                    Score += kickedBalls;
+                    IncrementScore(kickedBalls);
+                    SetThrows((CurrentFrame - 2) * 2 + 1, kickedBalls);
                 }
                 IsFirstThrow = true;
                 IncrementCurrentFrame();
             }
 
+        }
+
+        private void SetThrows(int throwNumber, int kickedBalls)
+        {
+            throws[throwNumber] += kickedBalls;
+        }
+
+        private void IncrementScore(int kickedBalls)
+        {
+            Score += kickedBalls;
+        }
+
+        private bool IsStrike(int frameNumber)
+        {
+            return throws[(frameNumber) * 2] == 10;
         }
 
         private void IncrementCurrentFrame()
@@ -63,7 +73,8 @@ namespace bowling_game_kata
 
         private bool IsSpare()
         {
-            return throws[(CurrentFrame - 1) * 2] + throws[(CurrentFrame - 1) * 2 + 1] == 10;
+            return throws[(CurrentFrame - 1) * 2]
+                + throws[(CurrentFrame - 1) * 2 + 1] == 10;
         }
 
         public int GetScoreByFrame(int frameNumber)
